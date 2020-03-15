@@ -1,0 +1,38 @@
+{
+    "name": "gormus/release-management-demo",
+    "description": "An experiment to create release tags programiatically.",
+    "type": "project",
+    "license": "MIT",
+    "homepage": "https://github.com/gormus/release-management-demo",
+    "authors": [
+        {
+            "name": "Osman Gormus",
+            "email": "osman@gorm.us"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "require": {
+        "bower-asset/lazysizes": "^5.2",
+        "composer/installers": "^1.8.0",
+        "oomphinc/composer-installers-extender": "^1.1.2"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "installer-types": ["bower-asset", "npm-asset"],
+        "installer-paths": {
+            "web/libraries/{$name}": ["type:bower-asset", "type:npm-asset"]
+        }
+    }
+}
