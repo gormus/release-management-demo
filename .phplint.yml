@@ -1,9 +1,0 @@
-path: ./
-jobs: 10
-extensions:
-  - php
-  - module
-  - theme
-  - inc
-exclude:
-  - vendor
