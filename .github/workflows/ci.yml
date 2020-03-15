@@ -21,9 +21,12 @@ jobs:
           dir: './web'
 
   build:
+    name: Install dependencies, and build project
     needs: lint
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        
       - continue-on-error: false
         name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
