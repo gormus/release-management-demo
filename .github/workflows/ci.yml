@@ -1,4 +1,4 @@
-name: "CI Demo"
+name: CI Demo
 
 on: 
   pull_request:
