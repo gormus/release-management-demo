@@ -18,7 +18,7 @@ jobs:
       - name: PHP Syntax Checker (Lint)
         uses: StephaneBour/actions-php-lint@7.3
         with:
-          dir: './web'
+          dir: './public'
 
   build:
     name: Install dependencies, and build project
