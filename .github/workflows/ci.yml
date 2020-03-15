@@ -15,7 +15,10 @@ jobs:
       - name: Validate composer.json and composer.lock
         run: composer validate
 
-      - uses: michaelw90/PHP-Lint@master
+      - name: PHP Syntax Checker (Lint)
+        uses: StephaneBour/actions-php-lint@7.3
+        with:
+          dir: './web'
 
   build:
     needs: lint
