@@ -38,8 +38,6 @@ jobs:
           stable_branch: 'master'
           development_branch: 'production'
           allow_ff: false
-          allow_git_lfs: false
-          allow_forks: false
           user_name: 'Webteam'
           user_email: 'webteam_api@unity3d.com'
         env:
