@@ -9,7 +9,7 @@ jobs:
   tag-master:
     runs-on: ubuntu-latest
     steps:
-      -
+      - 
         name: Checkout repository with all commit history.
         uses: actions/checkout@v2
         with:
@@ -28,7 +28,7 @@ jobs:
     needs: tag-master
     steps:
       # See https://github.com/robotology/gh-action-nightly-merge/issues/4#issuecomment-644972519
-      -
+      - 
         name: Checkout repository
         uses: actions/checkout@v1
 
@@ -38,9 +38,5 @@ jobs:
           stable_branch: 'master'
           development_branch: 'production'
           allow_ff: false
-          allow_git_lfs: false
-          allow_forks: false
-          user_name: 'Webteam'
-          user_email: 'webteam_api@unity3d.com'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
