@@ -1,9 +1,7 @@
-name: Merge master to production
+name: Deploy to production
 
 on:
-  pull_request:
-    types:
-      - labeled
+  push:
     branches:
       - master
 
@@ -14,11 +12,23 @@ jobs:
       - 
         name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          # '0' indicates all commit history.
+          fetch-depth: '0'
+
+      -
+        name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.23.0
+        env:
+            GITHUB_TOKEN: ${{ secrets.UNITY_GITHUB_PAT }}
+            DEFAULT_BUMP: patch
+            WITH_V: false
 
       - 
-        name: Merge branch
+        name: Merge master to production
         uses: devmasx/merge-branch@v1.1.0
         with:
+          type: now
           label_name: 'Merge master to production'
           target_branch: 'production'
         env:
