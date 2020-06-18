@@ -16,7 +16,7 @@ jobs:
 
             -
                 name: Update Composer global configuration
-                run: composer config -g github-oauth.github.com ${{ secrets.TOKEN }}
+                run: composer config -g github-oauth.github.com ${{ secrets.GITHUBTOKEN }}
 
             -
                 name: Validate composer.json and composer.lock
