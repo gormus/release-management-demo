@@ -31,12 +31,11 @@ jobs:
         name: Checkout repository
         uses: actions/checkout@v2
 
-      - 
-        name: Merge master to production
-        uses: devmasx/merge-branch@v1.1.0
+      - name: Merge master to production
+        uses: robotology/gh-action-nightly-merge@v1.2.0
         with:
-          type: now
-          label_name: 'Merge master to production'
-          target_branch: 'production'
+          stable_branch: 'master'
+          development_branch: 'production'
+          allow_ff: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
