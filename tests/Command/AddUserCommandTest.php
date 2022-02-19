@@ -12,12 +12,9 @@
 namespace App\Tests\Command;
 
 use App\Command\AddUserCommand;
-use App\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Tester\CommandTester;
+use App\Repository\UserRepository;
 
-class AddUserCommandTest extends KernelTestCase
+class AddUserCommandTest extends AbstractCommandTest
 {
     private $userData = [
         'username' => 'chuck_norris',
@@ -28,10 +25,7 @@ class AddUserCommandTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        exec('stty 2>&1', $output, $exitcode);
-        $isSttySupported = 0 === $exitcode;
-
-        if ('Windows' === PHP_OS_FAMILY || !$isSttySupported) {
+        if ('Windows' === \PHP_OS_FAMILY) {
             $this->markTestSkipped('`stty` is required to test this command.');
         }
     }
@@ -42,7 +36,7 @@ class AddUserCommandTest extends KernelTestCase
      * This test provides all the arguments required by the command, so the
      * command runs non-interactively and it won't ask for any argument.
      */
-    public function testCreateUserNonInteractive(bool $isAdmin)
+    public function testCreateUserNonInteractive(bool $isAdmin): void
     {
         $input = $this->userData;
         if ($isAdmin) {
@@ -61,7 +55,7 @@ class AddUserCommandTest extends KernelTestCase
      * arguments.
      * See https://symfony.com/doc/current/components/console/helpers/questionhelper.html#testing-a-command-that-expects-input
      */
-    public function testCreateUserInteractive(bool $isAdmin)
+    public function testCreateUserInteractive(bool $isAdmin): void
     {
         $this->executeCommand(
         // these are the arguments (only 1 is passed, the rest are missing)
@@ -78,7 +72,7 @@ class AddUserCommandTest extends KernelTestCase
      * This is used to execute the same test twice: first for normal users
      * (isAdmin = false) and then for admin users (isAdmin = true).
      */
-    public function isAdminDataProvider()
+    public function isAdminDataProvider(): ?\Generator
     {
         yield [false];
         yield [true];
@@ -88,37 +82,20 @@ class AddUserCommandTest extends KernelTestCase
      * This helper method checks that the user was correctly created and saved
      * in the database.
      */
-    private function assertUserCreated(bool $isAdmin)
+    private function assertUserCreated(bool $isAdmin): void
     {
-        $container = self::$kernel->getContainer();
-
-        /** @var User $user */
-        $user = $container->get('doctrine')->getRepository(User::class)->findOneByEmail($this->userData['email']);
+        /** @var \App\Entity\User $user */
+        $user = $this->getContainer()->get(UserRepository::class)->findOneByEmail($this->userData['email']);
         $this->assertNotNull($user);
 
         $this->assertSame($this->userData['full-name'], $user->getFullName());
         $this->assertSame($this->userData['username'], $user->getUsername());
-        $this->assertTrue($container->get('security.password_encoder')->isPasswordValid($user, $this->userData['password']));
+        $this->assertTrue($this->getContainer()->get('test.user_password_hasher')->isPasswordValid($user, $this->userData['password']));
         $this->assertSame($isAdmin ? ['ROLE_ADMIN'] : ['ROLE_USER'], $user->getRoles());
     }
 
-    /**
-     * This helper method abstracts the boilerplate code needed to test the
-     * execution of a command.
-     *
-     * @param array $arguments All the arguments passed when executing the command
-     * @param array $inputs    The (optional) answers given to the command when it asks for the value of the missing arguments
-     */
-    private function executeCommand(array $arguments, array $inputs = [])
+    protected function getCommandFqcn(): string
     {
-        self::bootKernel();
-
-        // this uses a special testing container that allows you to fetch private services
-        $command = self::$container->get(AddUserCommand::class);
-        $command->setApplication(new Application(self::$kernel));
-
-        $commandTester = new CommandTester($command);
-        $commandTester->setInputs($inputs);
-        $commandTester->execute($arguments);
+        return AddUserCommand::class;
     }
 }

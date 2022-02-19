@@ -29,11 +29,9 @@ use function Symfony\Component\String\u;
  */
 class DateTimePickerType extends AbstractType
 {
-    private $formatConverter;
-
-    public function __construct(MomentFormatConverter $converter)
-    {
-        $this->formatConverter = $converter;
+    public function __construct(
+        private MomentFormatConverter $formatConverter
+    ) {
     }
 
     /**
@@ -61,7 +59,7 @@ class DateTimePickerType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return DateTimeType::class;
     }

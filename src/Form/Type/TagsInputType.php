@@ -30,11 +30,9 @@ use Symfony\Component\Form\FormView;
  */
 class TagsInputType extends AbstractType
 {
-    private $tags;
-
-    public function __construct(TagRepository $tags)
-    {
-        $this->tags = $tags;
+    public function __construct(
+        private TagRepository $tags
+    ) {
     }
 
     /**
@@ -63,7 +61,7 @@ class TagsInputType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return TextType::class;
     }
